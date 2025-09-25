@@ -24,5 +24,23 @@ module alu_tb;
     opcode = '0;
     #10ns;
     // Complete your testbench code here
+
+    // === test ===
+    in_a = 16'd32767; in_b = 16'd1; opcode = 4'b0000; #1; check($signed(in_a), $signed(in_b), opcode); // ADD overflow
+    in_a = 16'd0;      in_b = 16'd1; opcode = 4'b0001; #1; check($signed(in_a), $signed(in_b), opcode); // SUB negative
+    in_a = 16'hAAAA;   in_b = 16'h5555; opcode = 4'b0100; #1; check($signed(in_a), $signed(in_b), opcode); // XOR
+
+    // === random ===
+    repeat (100) begin
+      in_a = $urandom();
+      in_b = $urandom();
+      opcode = $urandom_range(0, 7);
+      #1;
+      check($signed(in_a), $signed(in_b), opcode);
+    end
+
+    $display("Test completed.");
+    $finish;
+  
   end
 endmodule
